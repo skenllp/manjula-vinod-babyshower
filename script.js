@@ -108,7 +108,7 @@
     });
   });
 
-  // ===== Music (only works if audio/celebration-music.mp3 exists; never autoplays) =====
+  // ===== Music (audio/music.mp3; autoplays, falls back to muted if browser blocks it) =====
   var audio = $("audio"), mbtn = $("music"), note = $("music-note"), missing = false;
   function setMusic(on) {
     mbtn.classList.toggle("on", on); mbtn.setAttribute("aria-pressed", on);
@@ -116,11 +116,30 @@
     $("music-label").textContent = on ? "Music on" : "Music off";
     $("icon-on").hidden = !on; $("icon-off").hidden = on;
   }
-  audio.addEventListener("error", function () { missing = true; setMusic(false); note.hidden = false; setTimeout(function () { note.hidden = true; }, 2500); });
+  function showNote(msg) {
+    note.textContent = msg; note.hidden = false;
+    clearTimeout(showNote.t); showNote.t = setTimeout(function () { note.hidden = true; }, 2500);
+  }
+  audio.addEventListener("error", function () { missing = true; setMusic(false); showNote("Music file not added yet"); });
   mbtn.addEventListener("click", function () {
-    if (!audio.paused) { audio.pause(); setMusic(false); return; }
-    if (missing) { note.hidden = false; setTimeout(function () { note.hidden = true; }, 2500); return; }
-    audio.load();
+    if (missing) { showNote("Music file not added yet"); return; }
+    if (!audio.paused && !audio.muted) { audio.pause(); setMusic(false); return; }
+    audio.muted = false;
     audio.play().then(function () { setMusic(true); }).catch(function () { setMusic(false); });
   });
+  // Autoplay attempt: audible first, muted fallback (browsers often block sound without interaction)
+  function tryAutoplay() {
+    if (missing || !audio.paused) return;
+    audio.muted = false;
+    audio.play().then(function () { setMusic(true); }).catch(function () {
+      audio.muted = true;
+      audio.play().then(function () {
+        setMusic(false); showNote("Tap the speaker for music");
+        var once = function () { window.removeEventListener("pointerdown", once); };
+        window.addEventListener("pointerdown", once);
+      }).catch(function () {});
+    });
+  }
+  tryAutoplay();
+  window.addEventListener("load", tryAutoplay);
 })();
