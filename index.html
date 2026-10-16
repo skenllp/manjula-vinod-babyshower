@@ -33,14 +33,42 @@
 <audio id="audio" src="audio/music.mp3" loop preload="auto" autoplay></audio>
 <div id="music-note" class="music-note" role="status" hidden>Music file not added yet</div>
 
-<main>
+<!-- COVER / SPLASH -->
+<div id="cover" class="cover" role="region" aria-label="Invitation cover">
+  <div class="cover-bg" aria-hidden="true"></div>
+  <div class="cover-petals" aria-hidden="true"></div>
+  <div class="cover-content">
+    <div class="cover-badge">Baby Shower</div>
+    <div class="cover-lotus" aria-hidden="true">
+      <svg viewBox="0 0 100 80" fill="none" stroke="#C49A45" stroke-width="2">
+        <path d="M50 8C38 24 38 46 50 62C62 46 62 24 50 8Z"/>
+        <path d="M50 62C30 56 16 40 14 24C32 26 46 40 50 62Z"/>
+        <path d="M50 62C70 56 84 40 86 24C68 26 54 40 50 62Z"/>
+        <path d="M50 62C26 66 10 58 4 46C22 42 40 48 50 62Z"/>
+        <path d="M50 62C74 66 90 58 96 46C78 42 60 48 50 62Z"/>
+      </svg>
+    </div>
+    <p class="cover-script">Celebrating the Mother-to-be</p>
+    <h1 class="cover-name">MANJULA G</h1>
+    <p class="cover-rel">Wife of Vinod M</p>
+    
+    <div class="cover-divider" aria-hidden="true"><span></span><i>❖</i><span></span></div>
+
+    <button id="open-invite" class="btn-gold cover-btn" type="button" aria-label="Open Invitation and play music">
+      Open Invitation
+    </button>
+    <!-- <p class="cover-hint">Tap to open invitation &amp; play music</p> -->
+  </div>
+</div>
+
+<main id="main-content" hidden>
 <!-- HERO -->
 <header class="hero-wrap">
   <div class="hero" id="hero">
     <div class="petals" aria-hidden="true"></div>
     <div class="hero-text">
       <p class="eyebrow reveal">With Love &amp; Blessings</p>
-      <p class="script reveal">You're Invited to Celebrate</p>
+      <p class="script reveal">You're Invited to Celebrate</p>  
       <h1 class="name gold-text reveal">MANJULA G</h1>
       <p class="rel reveal">Wife of Vinod M</p>
       <div class="divider reveal" aria-hidden="true"><span></span><i>❖</i><span></span></div>
@@ -221,9 +249,8 @@
     <!-- <a href="#hero" class="btn-outline">Back to Top</a> -->
   </div>
 </section>
-</main>
-
 <footer class="footer"><p>With love &amp; blessings · Baby Shower of Manjula G</p></footer>
+</main>
 
 <script src="script.js"></script>
 </body>

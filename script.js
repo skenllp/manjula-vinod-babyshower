@@ -23,16 +23,20 @@
 
   // ===== Petals (few, light) =====
   if (!reduced) {
-    var box = document.querySelector(".petals");
-    for (var p = 0; p < 8; p++) {
-      var s = document.createElement("span");
-      s.className = "petal";
-      s.style.left = (Math.random() * 100) + "%";
-      s.style.setProperty("--dx", (Math.random() * 80 - 40) + "px");
-      s.style.animationDuration = (9 + Math.random() * 8) + "s";
-      s.style.animationDelay = (Math.random() * 8) + "s";
-      box.appendChild(s);
+    function addPetals(container, count) {
+      if (!container) return;
+      for (var p = 0; p < count; p++) {
+        var s = document.createElement("span");
+        s.className = "petal";
+        s.style.left = (Math.random() * 100) + "%";
+        s.style.setProperty("--dx", (Math.random() * 80 - 40) + "px");
+        s.style.animationDuration = (9 + Math.random() * 8) + "s";
+        s.style.animationDelay = (Math.random() * 8) + "s";
+        container.appendChild(s);
+      }
     }
+    addPetals(document.querySelector(".cover-petals"), 10);
+    addPetals(document.querySelector(".petals"), 8);
   }
 
 
@@ -84,11 +88,12 @@
   }
   var form = $("rsvp-form");
   function setErr(id, text, input) {
+    if (!$(id)) return !text;
     $(id).textContent = text;
     if (input) { input.classList.toggle("invalid", !!text); input.setAttribute("aria-invalid", text ? "true" : "false"); }
     return !text;
   }
-  form.addEventListener("submit", function (e) {
+  if (form) form.addEventListener("submit", function (e) {
     e.preventDefault();
     var name = form.name, guests = form.guests;
     var att = form.querySelector('input[name="attendance"]:checked');
@@ -108,8 +113,9 @@
     });
   });
 
-  // ===== Music (audio/music.mp3; autoplays, falls back to muted if browser blocks it) =====
-  var audio = $("audio"), mbtn = $("music"), note = $("music-note"), missing = false;
+  // ===== Music (audio/music.mp3; plays when Open Invitation is clicked) =====
+  var audio = $("audio"), mbtn = $("music"), note = $("music-note"), openBtn = $("open-invite"), missing = false;
+  var cover = $("cover"), mainContent = $("main-content");
   function setMusic(on) {
     mbtn.classList.toggle("on", on); mbtn.setAttribute("aria-pressed", on);
     mbtn.setAttribute("aria-label", on ? "Turn background music off" : "Turn background music on");
@@ -120,26 +126,53 @@
     note.textContent = msg; note.hidden = false;
     clearTimeout(showNote.t); showNote.t = setTimeout(function () { note.hidden = true; }, 2500);
   }
-  audio.addEventListener("error", function () { missing = true; setMusic(false); showNote("Music file not added yet"); });
+  function playMusic() {
+    audio.muted = false;
+    return audio.play().then(function () {
+      setMusic(true);
+    }).catch(function () {
+      setMusic(false);
+    });
+  }
+  audio.addEventListener("error", function () { missing = true; setMusic(false); });
   mbtn.addEventListener("click", function () {
     if (missing) { showNote("Music file not added yet"); return; }
     if (!audio.paused && !audio.muted) { audio.pause(); setMusic(false); return; }
-    audio.muted = false;
-    audio.play().then(function () { setMusic(true); }).catch(function () { setMusic(false); });
+    playMusic();
   });
-  // Autoplay attempt: audible first, muted fallback (browsers often block sound without interaction)
-  function tryAutoplay() {
-    if (missing || !audio.paused) return;
-    audio.muted = false;
-    audio.play().then(function () { setMusic(true); }).catch(function () {
-      audio.muted = true;
-      audio.play().then(function () {
-        setMusic(false); showNote("Tap the speaker for music");
-        var once = function () { window.removeEventListener("pointerdown", once); };
-        window.addEventListener("pointerdown", once);
-      }).catch(function () {});
-    });
+
+  // ===== Cover → Hero reveal =====
+  function openInvitation() {
+    // Play music (user gesture unlocks autoplay)
+    if (!missing) { playMusic(); } else { showNote("Music file not added yet"); }
+
+    // Animate cover out
+    if (cover) {
+      cover.classList.add("cover-out");
+      cover.addEventListener("transitionend", function () {
+        cover.hidden = true;
+      }, { once: true });
+    }
+
+    // Show main content
+    if (mainContent) {
+      mainContent.hidden = false;
+      // Scroll to top of page (hero)
+      window.scrollTo({ top: 0, behavior: "instant" });
+      // Trigger reveal animations for hero items
+      var heroRevealItems = mainContent.querySelectorAll(".hero-text .reveal");
+      if (!reduced) {
+        heroRevealItems.forEach(function (el, i) {
+          setTimeout(function () { el.classList.add("in"); }, i * 120);
+        });
+      } else {
+        heroRevealItems.forEach(function (el) { el.classList.add("in"); });
+      }
+    }
   }
-  tryAutoplay();
-  window.addEventListener("load", tryAutoplay);
+
+  if (openBtn) {
+    openBtn.addEventListener("click", openInvitation);
+  }
 })();
+
