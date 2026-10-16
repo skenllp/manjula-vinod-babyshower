@@ -16,6 +16,10 @@ a{color:inherit;text-decoration:none}
 .narrow{max-width:640px}
 .section{padding:4.5rem 0}
 .cream{background:var(--cream)}
+.welcome{background:url(images/image2.png) center center/cover no-repeat;aspect-ratio:941/1672;display:grid;align-content:center;text-shadow:0 1px 10px rgba(0,0,0,.5)}
+.welcome .h2,.welcome .lead,.welcome .divider{color:#fff}
+.welcome .divider span{background:linear-gradient(90deg,transparent,#fff)}
+.welcome .divider span:last-child{background:linear-gradient(270deg,transparent,#fff)}
 .gold-text{background:linear-gradient(135deg,#8C6428 0%,#C49A45 45%,#E3C375 60%,#8C6428 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
 .h2{font-family:var(--serif);font-weight:600;font-size:clamp(2rem,6vw,2.8rem);margin:0 0 .5rem;color:var(--gold-dark)}
 .lead{font-family:var(--serif);font-size:clamp(1.2rem,3.5vw,1.45rem);line-height:1.7;margin:1rem 0 1.75rem;color:var(--ink)}
@@ -43,7 +47,7 @@ a{color:inherit;text-decoration:none}
 .hero-wrap{display:flex;justify-content:center;background:#000}
 .hero{
   position:relative;width:100%;max-width:520px;
-  background:url(images/hero-bg.png) center center/cover no-repeat;
+  background:url(images/image.png) center center/cover no-repeat;
   overflow:hidden;
   min-height:100svh;
   display:flex;align-items:center;justify-content:center;
@@ -53,7 +57,8 @@ a{color:inherit;text-decoration:none}
   position:relative;z-index:2;
   text-align:center;
   padding:10% 12% 10%;
-  width:100%
+  width:100%;
+  text-shadow:0 1px 10px rgba(0,0,0,.5)
 }
 .eyebrow{font:400 .68rem var(--sans);letter-spacing:.28em;text-transform:uppercase;color:var(--gold-dark);margin:0 0 .4rem}
 .script{font-family:var(--serif);font-style:italic;font-size:clamp(1.15rem,5.2vw,1.6rem);margin:0;color:var(--ink)}
@@ -63,6 +68,8 @@ a{color:inherit;text-decoration:none}
 .date{font-family:var(--serif);font-size:clamp(1.25rem,5.6vw,1.65rem);font-weight:600;margin:0;color:var(--ink)}
 .time{font:400 .8rem var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:.15rem 0}
 .venue-line{font-family:var(--serif);font-size:1.35rem;color:var(--gold-dark);margin:.2rem 0 1rem;font-style:italic}
+.hero-text .eyebrow,.hero-text .script,.hero-text .rel,.hero-text .sub,.hero-text .date,.hero-text .time,.hero-text .venue-line{color:#fff}
+.hero-text .name{background-image:none;color:#fff}
 
 /* Scroll-down indicator */
 .scroll-down{
@@ -72,6 +79,9 @@ a{color:inherit;text-decoration:none}
   animation:scroll-bounce 1.8s ease-in-out infinite
 }
 .scroll-down:hover{opacity:1}
+.hero .scroll-down,.hero .scroll-chevrons{color:#fff}
+.hero .scroll-dot{border-color:#fff}
+.hero .scroll-dot::after{background:#fff}
 .scroll-dot{
   width:22px;height:36px;border:2px solid var(--gold-dark);border-radius:11px;
   position:relative;display:block
